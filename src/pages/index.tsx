@@ -34,7 +34,9 @@ const Index: NextPage = () => {
         <div className="flex flex-col justify-center items-center h-screen w-1/2 bg-white border rounded border-gray-400 p-8 mb-4 overflow-y-auto">
           {/* Message area */}
           {messages.map((msg, index) => (
-            <p key={index} className="self-start bg-gray-200 p-2 rounded mb-2">{msg}</p>
+            <div key={index} className="self-end bg-blue-500 text-white p-2 rounded mb-2 max-w-xs">
+              {msg}
+            </div>
           ))}
         </div>
         <div className="flex w-1/2">
