@@ -1,8 +1,5 @@
 import type { NextPage } from "next";
 
-import SignIn from "./signin";
-import SignUp from "./signup";
-
 const Index: NextPage = () => {
   return (
     <>

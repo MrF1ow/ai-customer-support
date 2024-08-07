@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import React from "react";
+import React, { useState } from "react";
 import {
   getAuth,
   signInWithPopup,
@@ -13,12 +13,22 @@ import { useAppDispatch } from "@/redux/store";
 import { setAuthState, setUser } from "@/redux/slices/authSlice";
 import Authentication from "@/components/authentication";
 import ProviderButton from "@/components/provider-button";
+import { FirebaseError } from "firebase/app";
 
 const SignIn: NextPage = () => {
+  const [invalidCredentials, setInvalidCredentials] = useState(false);
+
   const router = useRouter();
   const dispatch = useAppDispatch();
   const auth = getAuth();
   const googleProvider = new GoogleAuthProvider();
+
+  const handleLoginError = () => {
+    setInvalidCredentials(true);
+    setTimeout(() => {
+      setInvalidCredentials(false);
+    }, 5000);
+  }
 
   const signInWithProvider = async () => {
     try {
@@ -53,7 +63,14 @@ const SignIn: NextPage = () => {
         router.push("/chat");
       }
     } catch (error) {
-      console.log(error);
+      if (
+        error instanceof FirebaseError &&
+        error.code === "auth/invalid-credential"
+      ) {
+        handleLoginError();
+      } else {
+        console.log(error);
+      }
     }
   };
 
@@ -66,9 +83,13 @@ const SignIn: NextPage = () => {
     );
   };
 
+
   return (
     <Authentication>
-      <h1 className="text-2xl font-bold text-center my-4">Sign In</h1>
+      <div className="w-full h-auto">
+        <h1 className="text-2xl font-bold text-center my-4">Sign In</h1>
+        {invalidCredentials && (<div className="w-full bg-red-400 border-red-600 text-white font-bold py-2 px-4 rounded my-4">Invalid Email and/or Password. Please Try Again!</div>)}
+      </div>
       <form
         className="flex flex-col space-y-4 text-black"
         onSubmit={handleSignInForm}
