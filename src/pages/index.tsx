@@ -1,27 +1,58 @@
+import { useState } from 'react';
 import { NextPage } from 'next';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUp, faRedo } from '@fortawesome/free-solid-svg-icons';
 
 const Index: NextPage = () => {
+  const [messages, setMessages] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState('');
+
+  const handleSubmit = () => {
+    if (inputValue.trim()) {
+      setMessages([...messages, inputValue]);
+      setInputValue('');
+    }
+  };
+
+  const handleReset = () => {
+    setMessages([]);
+  };
+
   return (
     <>
       <div className="flex flex-col items-center h-screen w-screen bg-gray-100 p-8">
-        <div className="flex justify-center items-center h-screen w-1/2 bg-white border border-gray-300 p-8 mb-4">
-          {/* Content for the box */}
-          <p>This is the message area.</p>
+        <h1 className="text-3xl font-black mb-4">Chatbot</h1>
+        <div className="flex w-1/2 justify-end mb-4">
+          <button
+            onClick={handleReset}
+            className="bg-red-500 text-white rounded px-4 py-2 text-lg focus:outline-none hover:bg-red-600 flex items-center justify-center"
+          >
+            <FontAwesomeIcon icon={faRedo} className="mr-2" />
+            <span>Clear</span>
+          </button>
         </div>
-
-
-        <div className="flex w-1/2 items-end">
+        <div className="flex flex-col justify-center items-center h-screen w-1/2 bg-white border rounded border-gray-400 p-8 mb-4 overflow-y-auto">
+          {/* Message area */}
+          {messages.map((msg, index) => (
+            <p key={index} className="self-start bg-gray-200 p-2 rounded mb-2">{msg}</p>
+          ))}
+        </div>
+        <div className="flex w-1/2">
           <input
             type="text"
             placeholder="Enter message here"
             className="rounded-l-lg border border-gray-300 w-full p-2 text-lg focus:outline-none focus:border-blue-500"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
           />
-          <button className="bg-blue-500 text-white rounded-r-lg px-4 py-2 text-lg focus:outline-none hover:bg-blue-600 flex items-center justify-center">
-            <i className="fas fa-arrow-up mr-2"></i>
-            <span>Submit</span>
+          <button
+            onClick={handleSubmit}
+            className="bg-blue-500 text-white rounded-r-lg px-4 py-2 text-lg focus:outline-none hover:bg-blue-600 flex items-center justify-center"
+          >
+            <FontAwesomeIcon icon={faArrowUp} />
           </button>
         </div>
-        </div>
+      </div>
     </>
   );
 };
