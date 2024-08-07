@@ -5,6 +5,7 @@ const Chat: NextPage = () => {
     <>
       <div>
         {/* Add your code here */}
+        THIS IS THE CHAT
       </div>
     </>
   );
