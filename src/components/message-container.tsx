@@ -8,7 +8,6 @@ const MessageContainer = ({ history, direction }: MessageContainerProps) => {
 
   useEffect(() => {
     setMessages(history);
-    console.log("MessageContainer: ", history);
   }, [history]);
 
   return (

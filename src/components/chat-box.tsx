@@ -20,9 +20,10 @@ const ChatBox = () => {
 
   useEffect(() => {
     if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+      const heightShift = containerRef.current.scrollHeight + 100;
+      containerRef.current.scrollTop = heightShift;
     }
-  }, [aiMessagesFromStore, userMessagesFromStore]);
+  }, [aiMessages, userMessages]);
 
   if (!aiMessages || !userMessages) return null;
 
