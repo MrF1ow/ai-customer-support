@@ -1,9 +1,8 @@
 import { MessageContainerProps } from "@/types";
-import TextBubble from "./message-item";
+import MessageItem from "./message-item";
 import { useEffect, useState } from "react";
 
-const MessageContainer = ({ history, direction }: MessageContainerProps) => {
-  const sender = direction === "left" ? "AI Pal" : "You";
+const MessageContainer = ({ history }: MessageContainerProps) => {
   const [messages, setMessages] = useState(history);
 
   useEffect(() => {
@@ -11,15 +10,13 @@ const MessageContainer = ({ history, direction }: MessageContainerProps) => {
   }, [history]);
 
   return (
-    <div className={`w-[48%] h-full flex flex-col justify-${direction} gap-4`}>
+    <div className={`w-full h-full flex flex-col gap-4`}>
       {messages.map((message, index) =>
         message ? (
-          <TextBubble
+          <MessageItem
             key={index}
-            messenger={sender}
-            text={message.message}
-            time={message.time}
-            direction={direction}
+            messenger={message.role}
+            text={message.content}
           />
         ) : null
       )}

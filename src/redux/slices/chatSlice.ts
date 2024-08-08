@@ -1,33 +1,67 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
 import type { IMessage, IChatState } from "../../types";
-import { clear } from "console";
+
+const fetchAiMessage = createAsyncThunk<IMessage, IMessage[]>(
+  "chat/fetchAiMessage",
+  async (chatHistory: IMessage[]) => {
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ messages: chatHistory }),
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+);
 
 const initialState: IChatState = {
-  aiMessages: [],
-  userMessages: [],
+  status: "idle",
+  chatHistory: [],
+  error: null,
 };
 
 export const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    addAiMessage: (state, action: PayloadAction<IMessage>) => {
-      state.aiMessages.push(action.payload);
-    },
-    addUserMessage: (state, action: PayloadAction<IMessage>) => {
-      state.userMessages.push(action.payload);
+    addMessage: (state, action: PayloadAction<IMessage>) => {
+      state.chatHistory.push(action.payload);
     },
     clearChat: (state) => {
-      state.aiMessages = [];
-      state.userMessages = [];
+      state.chatHistory = [];
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchAiMessage.fulfilled, (state, action: PayloadAction<IMessage>) => {
+        if (action.payload) {
+          state.chatHistory.push(action.payload);
+        }
+        state.status = "succeeded";
+      })
+      .addCase(fetchAiMessage.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || null;
+      })
+      .addCase(fetchAiMessage.pending, (state) => {
+        state.status = "loading";
+      });
   },
 });
 
-export const { addAiMessage, addUserMessage, clearChat } = chatSlice.actions;
+export const { addMessage, clearChat } = chatSlice.actions;
 export const chatReducer = chatSlice.reducer;
-
-export const selectAiMessages = (state: RootState) => state.chat.aiMessages;
-export const selectUserMessages = (state: RootState) => state.chat.userMessages;
+export { fetchAiMessage };
+export const selectChatHistory = (state: RootState) => state.chat.chatHistory;

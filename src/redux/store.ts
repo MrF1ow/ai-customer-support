@@ -33,7 +33,7 @@ const authPersistConfig = {
 const chatPersistConfig = {
   key: "chat",
   storage: storage,
-  whitelist: ["aiMessages", "userMessages"],
+  whitelist: ["chatHistory"],
 };
 
 const rootReducer = combineReducers({

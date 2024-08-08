@@ -1,39 +1,46 @@
 import MessageContainer from "./message-container";
 import { useEffect, useState, useRef } from "react";
 import { useAppSelector } from "@/redux/store";
-import { selectAiMessages, selectUserMessages } from "@/redux/slices/chatSlice";
+import { useDispatch } from "react-redux";
+import { selectChatHistory, fetchAiMessage } from "@/redux/slices/chatSlice";
 import { IMessage } from "@/types";
 
 const ChatBox = () => {
-  const aiMessagesFromStore = useAppSelector(selectAiMessages);
-  const userMessagesFromStore = useAppSelector(selectUserMessages);
+  const dispatch = useDispatch<any>();
 
-  const [aiMessages, setAiMessages] = useState<IMessage[]>([]);
-  const [userMessages, setUserMessages] = useState<IMessage[]>([]);
+  const chatHistoryFromStore = useAppSelector(selectChatHistory);
+
+  const [chatHistory, setChatHistory] = useState<IMessage[]>([]);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const prevChatHistoryLengthRef = useRef<number>(0);
+
   useEffect(() => {
-    setAiMessages(aiMessagesFromStore);
-    setUserMessages(userMessagesFromStore);
-  }, [aiMessagesFromStore, userMessagesFromStore]);
+    setChatHistory(chatHistoryFromStore);
+    if (
+      chatHistoryFromStore.length > prevChatHistoryLengthRef.current &&
+      chatHistoryFromStore[chatHistoryFromStore.length - 1].role === "user"
+    ) {
+      dispatch(fetchAiMessage(chatHistoryFromStore));
+    }
+  }, [chatHistoryFromStore]);
 
   useEffect(() => {
     if (containerRef.current) {
       const heightShift = containerRef.current.scrollHeight + 100;
       containerRef.current.scrollTop = heightShift;
     }
-  }, [aiMessages, userMessages]);
+  }, [chatHistory]);
 
-  if (!aiMessages || !userMessages) return null;
+  if (!chatHistory) return null;
 
   return (
     <div
       ref={containerRef}
       className="w-full h-auto flex flex-grow overflow-y-auto justify-center"
     >
-      <MessageContainer direction="left" history={aiMessages} />
-      <MessageContainer direction="right" history={userMessages} />
+      <MessageContainer history={chatHistory} />
     </div>
   );
 };

@@ -12,27 +12,25 @@ interface ProviderButtonProps {
   onClick: () => void;
 }
 
-interface IMessage {
-  message: string;
-  time: string;
-}
+type IMessage = {
+  role: "system" | "user" | "assistant";
+  content: string;
+};
 
 interface IChatState {
-  aiMessages: IMessage[];
-  userMessages: IMessage[];
+  status: "idle" | "loading" | "failed" | "succeeded";
+  chatHistory: IMessage[];
+  error: null | string;
 }
 
 interface MessageItemProps {
   messenger: string;
   text: string;
-  time: string;
-  direction: "left" | "right";
   // image: string;
 }
 
 interface MessageContainerProps {
   history: IMessage[] | [];
-  direction: "left" | "right";
 }
 
 interface MessageBarProps {

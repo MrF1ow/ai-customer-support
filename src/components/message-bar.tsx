@@ -1,24 +1,19 @@
 import { FaArrowUp } from "react-icons/fa";
 import { useState } from "react";
 
-import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { addUserMessage, selectUserMessages, clearChat } from "@/redux/slices/chatSlice";
+import { useAppDispatch } from "@/redux/store";
+import { addMessage } from "@/redux/slices/chatSlice";
+import { IMessage } from "@/types";
 
 const MessageBar = () => {
   const dispatch = useAppDispatch();
-  const selector = useAppSelector(selectUserMessages);
   const [message, setMessage] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const time = new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
     if (!message) return;
-    const newMessage = { message: message, time: time };
-    dispatch(addUserMessage(newMessage));
+    const newMessage: IMessage = { role: "user", content: message };
+    dispatch(addMessage(newMessage));
     setMessage("");
   };
 
