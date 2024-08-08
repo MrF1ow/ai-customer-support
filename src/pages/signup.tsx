@@ -1,10 +1,11 @@
 import type { NextPage } from "next";
-import React from "react";
+import React, { useState } from "react";
 import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { useRouter } from "next/router";
 import { FaGoogle } from "react-icons/fa";
@@ -20,9 +21,11 @@ const SignUp: NextPage = () => {
   const auth = getAuth();
   const googleProvider = new GoogleAuthProvider();
 
+  const [displayName, setDisplayName] = useState<string | undefined>();
+
   const registerUserWithEmailAndPassword = async (
     email: string,
-    password: string
+    password: string,
   ) => {
     try {
       const result = await createUserWithEmailAndPassword(
@@ -32,11 +35,18 @@ const SignUp: NextPage = () => {
       );
       const user = result.user;
       if (user) {
+
+        if (displayName){
+          await updateProfile(user, {displayName: displayName});
+        }
+
         dispatch(setAuthState(true));
         dispatch(
           setUser({
             email: user.email as string,
             uid: user.uid as string,
+            displayName:  user.displayName as string | undefined,
+            photo: user.photoURL as string | undefined,
           })
         );
         router.push("/chat");
@@ -55,6 +65,8 @@ const SignUp: NextPage = () => {
           setUser({
             email: result.user.email as string,
             uid: result.user.uid as string,
+            displayName: result.user.displayName as string | undefined,
+            photo: result.user.photoURL as string | undefined,
           })
         );
         router.push("/chat");
@@ -67,6 +79,7 @@ const SignUp: NextPage = () => {
   const handleSignUpForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    setDisplayName(`${data.get("first_name")} ${data.get("last_name")}`);
     registerUserWithEmailAndPassword(
       data.get("email") as string,
       data.get("password") as string
