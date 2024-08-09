@@ -34,11 +34,14 @@ const SignIn: NextPage = () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       if (result.user) {
+        console.log(result);
         dispatch(setAuthState(true));
         dispatch(
           setUser({
             email: result.user.email as string,
             uid: result.user.uid as string,
+            displayName: result.user.displayName as string | undefined,
+            photo: result.user.photoURL as string | undefined,
           })
         );
         router.push("/chat");
@@ -58,6 +61,8 @@ const SignIn: NextPage = () => {
           setUser({
             email: result.user.email as string,
             uid: result.user.uid as string,
+            displayName: result.user.displayName as string | undefined,
+            photo: result.user.photoURL as string | undefined,
           })
         );
         router.push("/chat");

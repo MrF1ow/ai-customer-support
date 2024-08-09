@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 import { persistReducer } from "redux-persist";
 import { authReducer } from "./slices/authSlice";
+import { chatReducer } from "./slices/chatSlice";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 
 const createNoopStorage = () => {
@@ -29,8 +30,15 @@ const authPersistConfig = {
   whitelist: ["authState"],
 };
 
+const chatPersistConfig = {
+  key: "chat",
+  storage: storage,
+  whitelist: ["chatHistory"],
+};
+
 const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
+  chat: persistReducer(chatPersistConfig, chatReducer),
 });
 
 export const store = configureStore({
