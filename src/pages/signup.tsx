@@ -14,6 +14,7 @@ import { useAppDispatch } from "@/redux/store";
 import { setAuthState, setUser } from "@/redux/slices/authSlice";
 import Authentication from "@/components/authentication";
 import ProviderButton from "@/components/provider-button";
+import Link from "next/link";
 
 const SignUp: NextPage = () => {
   const router = useRouter();
@@ -129,12 +130,12 @@ const SignUp: NextPage = () => {
       <div>
         <p>
           Already have an account?{" "}
-          <a
+          <Link
             href="/signin"
             className="text-blue-500 hover:underline cursor-pointer"
           >
             Sign In
-          </a>
+          </Link>
         </p>
       </div>
     </Authentication>

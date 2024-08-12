@@ -14,6 +14,7 @@ import { setAuthState, setUser } from "@/redux/slices/authSlice";
 import Authentication from "@/components/authentication";
 import ProviderButton from "@/components/provider-button";
 import { FirebaseError } from "firebase/app";
+import Link from "next/link";
 
 const SignIn: NextPage = () => {
   const [invalidCredentials, setInvalidCredentials] = useState(false);
@@ -120,13 +121,8 @@ const SignIn: NextPage = () => {
       </div>
       <div>
         <p>
-          Don't have an account?{" "}
-          <a
-            href="/signup"
-            className="text-blue-500 hover:underline cursor-pointer"
-          >
-            Sign Up
-          </a>
+          Don&apos;t have an account?{" "}
+          <Link className="text-blue-500 hover:underline cursor-pointer" href="/signup">Sign Up</Link>
         </p>
       </div>
     </Authentication>
