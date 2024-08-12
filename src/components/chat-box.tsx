@@ -38,7 +38,7 @@ const ChatBox = () => {
   return (
     <div
       ref={containerRef}
-      className="w-full h-auto flex flex-grow overflow-y-auto justify-center"
+      className="w-full h-5/6 flex flex-grow overflow-y-auto justify-center"
     >
       <MessageContainer history={chatHistory} />
     </div>

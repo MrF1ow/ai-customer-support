@@ -90,7 +90,7 @@ const SignUp: NextPage = () => {
     <Authentication>
       <h1 className="text-2xl font-bold text-center my-4">Sign Up</h1>
       <form
-        className="flex flex-col space-y-4 text-black"
+        className="w-full flex flex-col space-y-4 text-black"
         onSubmit={handleSignUpForm}
       >
         <div className="flex flex-row justify-between">
