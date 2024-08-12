@@ -96,7 +96,7 @@ const SignIn: NextPage = () => {
         {invalidCredentials && (<div className="w-full bg-red-400 border-red-600 text-white font-bold py-2 px-4 rounded my-4">Invalid Email and/or Password. Please Try Again!</div>)}
       </div>
       <form
-        className="flex flex-col space-y-4 text-black"
+        className="w-full flex flex-col space-y-4 text-black"
         onSubmit={handleSignInForm}
       >
         <input

@@ -20,7 +20,7 @@ const MessageBar = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-row w-5/6 justify-center"
+      className="flex flex-row w-full md:w-5/6 justify-center"
     >
       <input
         type="text"

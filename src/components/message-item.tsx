@@ -10,7 +10,7 @@ const MessageItem = ({
   const sentFrom = messenger === "user" ? "You" : "AI Pal";
   return (
     <div className={`w-full h-auto flex ${justifyDirection}`}>
-      <div className={`w-auto max-w-[48%] flex flex-col gap-2 ${chatDirection}`}>
+      <div className={`w-auto max-w-[48%] md:max-w-[60%] lg:max-w-[65%] xl:max-w-[70%] flex flex-col gap-2 ${chatDirection}`}>
         <div className="w-full text-white text-sm font-bold">{sentFrom}</div>
         <div
           className={`w-auto h-auto bg-foreground rounded-lg ${chatDirection}`}
